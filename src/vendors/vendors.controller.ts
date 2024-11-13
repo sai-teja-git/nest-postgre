@@ -5,6 +5,11 @@ import { VendorsService } from './vendors.service';
 export class VendorsController {
   constructor(private readonly vendorsService: VendorsService) { }
 
+  @Get("rating")
+  getVendorsRating() {
+    return this.vendorsService.getVendorsRating()
+  }
+
   @Get()
   getVendors() {
     return this.vendorsService.getVendors()

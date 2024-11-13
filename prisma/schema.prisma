@@ -22,6 +22,8 @@ model User {
   lastLogin DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+
+  Order Order[]
 }
 
 model Vendor {
@@ -70,6 +72,27 @@ model Product {
   vendorId    Int
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
+  Order       Order[]
 
   @@unique([name, brandId, vendorId])
+}
+
+enum orderStatus {
+  delivered @map("Delivered")
+  canceled  @map("Canceled")
+  returned  @map("Returned")
+  replaced  @map("Replaced")
+}
+
+model Order {
+  id              Int         @id @default(autoincrement())
+  user            User        @relation(fields: [userId], references: [id])
+  userId          Int
+  product         Product     @relation(fields: [productId], references: [id])
+  productId       Int
+  discountPercent Float
+  rating          Int
+  status          orderStatus
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 }

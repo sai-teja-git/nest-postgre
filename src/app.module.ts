@@ -7,17 +7,23 @@ import { VendorsModule } from './vendors/vendors.module';
 import { ProductsModule } from './products/products.module';
 import { ProductCategoryModule } from './product-category/product-category.module';
 import { BrandsModule } from './brands/brands.module';
+import { CronModule } from './cron/cron.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true
     }),
+    // ScheduleModule.forRoot(),
     UsersModule,
     VendorsModule,
     ProductsModule,
     ProductCategoryModule,
     BrandsModule,
+    CronModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [PrismaService],

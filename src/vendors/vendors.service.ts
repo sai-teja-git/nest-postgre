@@ -47,4 +47,17 @@ export class VendorsService {
     }
   }
 
+  async getVendorsRating() {
+    try {
+      const data = await this.prisma.order.findMany({})
+      return {
+        data,
+        message: "Vendor(s) Data Fetched",
+        status: HttpStatus.OK
+      }
+    } catch (error) {
+      throw new HttpException(error.message, error.status ?? 500)
+    }
+  }
+
 }
