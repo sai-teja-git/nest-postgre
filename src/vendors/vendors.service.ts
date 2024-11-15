@@ -49,10 +49,35 @@ export class VendorsService {
 
   async getVendorsRating() {
     try {
-      const data = await this.prisma.order.findMany({})
+      const data = await this.prisma.order.groupBy({
+        by: ["productId"],
+        where: {
+          status: {
+            in: ["delivered", "replaced"]
+          }
+        },
+        _sum: {
+          rating: true
+        },
+        _count: {
+          _all: true
+        }
+      })
+      // const data = await this.prisma.order.groupBy()
+      const rawData = await this.prisma.$queryRaw`
+        SELECT 
+        "prt"."vendorId" AS vendor, "vdr"."name" AS vendorName, AVG("ord"."rating") AS avgRating
+        FROM "Order" AS ord
+        LEFT JOIN "Product" AS prt ON "ord"."productId"="prt"."id"
+        LEFT JOIN "Vendor" AS vdr ON "prt"."vendorId"="vdr"."id"
+        WHERE ord.status='Delivered' OR ord.status='Replaced'
+        GROUP BY vendor,"vdr"."name"
+        ORDER BY avgRating ASC
+        `
       return {
-        data,
-        message: "Vendor(s) Data Fetched",
+        // rawData,
+        queryData: data,
+        message: "Vendor(s) Rating Fetched",
         status: HttpStatus.OK
       }
     } catch (error) {
