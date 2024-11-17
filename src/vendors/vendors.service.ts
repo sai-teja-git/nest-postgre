@@ -63,7 +63,9 @@ export class VendorsService {
           _all: true
         }
       })
-      // const data = await this.prisma.order.groupBy()
+      // const data = await this.prisma.order.groupBy({
+      //   by: ["productId"]
+      // })
       const rawData = await this.prisma.$queryRaw`
         SELECT 
         "prt"."vendorId" AS vendor, "vdr"."name" AS vendorName, AVG("ord"."rating") AS avgRating
